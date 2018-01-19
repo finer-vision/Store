@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "dev": "./node_modules/webpack/bin/webpack.js --watch",
+    "build": "./node_modules/webpack/bin/webpack.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "devDependencies": {
+    "webpack": "^3.10.0"
+  }
+}
