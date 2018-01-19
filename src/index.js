@@ -1,4 +1,5 @@
 import Cache from "./Cache";
+import Query from "./Query";
 
 const STATE = {};
 const SUBSCRIPTIONS = {};
@@ -52,7 +53,7 @@ export default class Store {
         if (SUBSCRIPTIONS.hasOwnProperty('update')) {
             SUBSCRIPTIONS['update'].map(subscription => {
                 subscription(STATE);
-            });
+        });
         }
     }
 
@@ -64,6 +65,11 @@ export default class Store {
      * @param {*=} defaultValue
      */
     static get(query, defaultValue = null) {
+
+        if (query.indexOf('*') >= 0) {
+            return Query.match(query, defaultValue);
+        }
+
         if (Cache.has(query)) {
             return Cache.get(query);
         }
