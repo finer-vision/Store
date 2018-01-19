@@ -1,8 +1,43 @@
 import Cache from "./Cache";
 
-class Store {
-    constructor() {
-        this.state = {};
+const STATE = {};
+const SUBSCRIPTIONS = {};
+
+export default class Store {
+    /**
+     * Listen to the given subscription and call the given func.
+     *
+     * @param {String} subscription
+     * @param {Function} func
+     * @returns {{key: String, index: Number}}
+     */
+    static subscribe(subscription, func) {
+        if (typeof func !== 'function') {
+            throw new Error('Second argument to the "on" method is not a function.');
+        }
+
+        if (!SUBSCRIPTIONS.hasOwnProperty(subscription)) {
+            SUBSCRIPTIONS[subscription] = [];
+        }
+
+        SUBSCRIPTIONS[subscription].push(func);
+
+        return {
+            key: subscription,
+            index: SUBSCRIPTIONS[subscription].length - 1
+        };
+    }
+
+    /**
+     * Unsubscribe from the given subscription.
+     *
+     * @param {String} key
+     * @param {Number} index
+     */
+    static unSubscribe({key, index}) {
+        if (SUBSCRIPTIONS.hasOwnProperty(key)) {
+            SUBSCRIPTIONS[key].splice(index, 1);
+        }
     }
 
     /**
@@ -10,9 +45,15 @@ class Store {
      *
      * @param {Object} state
      */
-    set(state = {}) {
-        Object.assign(this.state, state);
+    static set(state = {}) {
+        Object.assign(STATE, state);
         Cache.update(state);
+
+        if (SUBSCRIPTIONS.hasOwnProperty('update')) {
+            SUBSCRIPTIONS['update'].map(subscription => {
+                subscription(STATE);
+            });
+        }
     }
 
     /**
@@ -22,13 +63,13 @@ class Store {
      * @param {String} query
      * @param {*=} defaultValue
      */
-    get(query, defaultValue = null) {
+    static get(query, defaultValue = null) {
         if (Cache.has(query)) {
             return Cache.get(query);
         }
 
         const keys = String(query).split('.');
-        let state = this.state;
+        let state = STATE;
 
         for (let i = 0; i < keys.length; i++) {
             const key = keys[i];
@@ -43,5 +84,3 @@ class Store {
         return state;
     }
 }
-
-export default new Store();
