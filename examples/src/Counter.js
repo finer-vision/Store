@@ -1,4 +1,4 @@
-import Store from "../src";
+import Store from "../../src";
 
 Store.set({counter: 0});
 
