@@ -1,21 +1,25 @@
 import Store from "../../src";
 
-Store.set({counter: 0});
+const path = window.location.pathname.replace(/.*?examples\/?/, '');
 
-const counter = document.querySelector('#counter');
-const increment = document.querySelector('#increment');
-const decrement = document.querySelector('#decrement');
+if (path === 'counter.html') {
+    Store.set({counter: 0});
 
-increment.addEventListener('click', () => {
-    Store.set({counter: Store.get('counter') + 1});
-    counter.innerText = Store.get('counter');
-});
+    const counter = document.querySelector('#counter');
+    const increment = document.querySelector('#increment');
+    const decrement = document.querySelector('#decrement');
 
-decrement.addEventListener('click', () => {
-    Store.set({counter: Store.get('counter') - 1});
-    counter.innerText = Store.get('counter');
-});
+    increment.addEventListener('click', () => {
+        Store.set({counter: Store.get('counter') + 1});
+        counter.innerText = Store.get('counter');
+    });
 
-Store.subscribe('update', state => {
-    console.log('state was updated', state);
-});
+    decrement.addEventListener('click', () => {
+        Store.set({counter: Store.get('counter') - 1});
+        counter.innerText = Store.get('counter');
+    });
+
+    Store.subscribe('update', state => {
+        console.log('state was updated', state);
+    });
+}

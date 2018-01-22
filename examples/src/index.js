@@ -1,1 +1,2 @@
 import "./Counter";
+import "./React";
