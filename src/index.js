@@ -1,5 +1,5 @@
-import Cache from "./Cache";
-import Query from "./Query";
+const Cache = require('./Cache');
+const Query = require('./Query');
 
 const STATE = {};
 const SUBSCRIPTIONS = {};
