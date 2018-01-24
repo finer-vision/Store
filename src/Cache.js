@@ -1,6 +1,6 @@
 const CACHE = {};
 
-module.exports = class Cache {
+export default class Cache {
     /**
      * Get the query {query, value} from the given object.
      *
@@ -67,4 +67,4 @@ module.exports = class Cache {
     static set(query, state) {
         CACHE[query] = state;
     }
-};
+}

@@ -1,4 +1,4 @@
-module.exports = class Query {
+export default class Query {
     /**
      * TODO: Add description
      *
@@ -29,4 +29,4 @@ module.exports = class Query {
 
         return defaultValue;
     }
-};
+}
