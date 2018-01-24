@@ -53,7 +53,7 @@ export default class Store {
         if (SUBSCRIPTIONS.hasOwnProperty('update')) {
             SUBSCRIPTIONS['update'].map(subscription => {
                 subscription(STATE);
-        });
+            });
         }
     }
 
