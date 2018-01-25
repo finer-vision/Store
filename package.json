@@ -1,6 +1,6 @@
 {
   "name": "fv-store",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "Fast and simple key = value storage",
   "main": "src/index.js",
   "scripts": {
