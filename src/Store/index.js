@@ -1,8 +1,8 @@
 import Cache from "./Cache";
 import Query from "./Query";
+import Subscription from "./Subscription";
 
 const STATE = {};
-const SUBSCRIPTIONS = {};
 
 export default class Store {
     /**
@@ -13,20 +13,7 @@ export default class Store {
      * @returns {{key: String, index: Number}}
      */
     static subscribe(subscription, func) {
-        if (typeof func !== 'function') {
-            throw new Error('Second argument to the "on" method is not a function.');
-        }
-
-        if (!SUBSCRIPTIONS.hasOwnProperty(subscription)) {
-            SUBSCRIPTIONS[subscription] = [];
-        }
-
-        SUBSCRIPTIONS[subscription].push(func);
-
-        return {
-            key: subscription,
-            index: SUBSCRIPTIONS[subscription].length - 1
-        };
+        Subscription.subscribe(subscription, func);
     }
 
     /**
@@ -36,9 +23,7 @@ export default class Store {
      * @param {Number} index
      */
     static unSubscribe({key, index}) {
-        if (SUBSCRIPTIONS.hasOwnProperty(key)) {
-            SUBSCRIPTIONS[key].splice(index, 1);
-        }
+        Subscription.unSubscribe({key, index});
     }
 
     /**
@@ -49,12 +34,7 @@ export default class Store {
     static set(state = {}) {
         Object.assign(STATE, state);
         Cache.update(state);
-
-        if (SUBSCRIPTIONS.hasOwnProperty('update')) {
-            SUBSCRIPTIONS['update'].map(subscription => {
-                subscription(STATE);
-            });
-        }
+        Subscription.emit('update', STATE);
     }
 
     /**
@@ -88,5 +68,15 @@ export default class Store {
         Cache.set(query, state);
 
         return state;
+    }
+
+    /**
+     * Unset the given query from the cache.
+     *
+     * @param {String} query
+     */
+    static unset(query) {
+        Cache.unset(query);
+        Subscription.emit('update', STATE);
     }
 }

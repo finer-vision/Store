@@ -67,4 +67,16 @@ export default class Cache {
     static set(query, state) {
         CACHE[query] = state;
     }
+
+    /**
+     * Unset the state from the cache if it has the given query.
+     *
+     * @param {String} query
+     * @param {Object} state
+     */
+    static unset(query, state) {
+        if (Cache.has(query)) {
+            delete CACHE[query];
+        }
+    }
 }
