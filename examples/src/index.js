@@ -1,2 +1,0 @@
-import "./Counter";
-import "./React";
