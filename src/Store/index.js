@@ -32,7 +32,9 @@ export default class Store {
      * @param {Object} state
      */
     static set(state = {}) {
-        Object.assign(STATE, state);
+        let stateCopy = JSON.parse(JSON.stringify(STATE));
+        Object.assign(stateCopy, state);
+        Object.assign(STATE, stateCopy);
         Cache.update(state);
         Subscription.emit('update', STATE);
     }
@@ -45,7 +47,6 @@ export default class Store {
      * @param {*=} defaultValue
      */
     static get(query, defaultValue = null) {
-
         if (query.indexOf('*') >= 0) {
             return Query.match(query, defaultValue);
         }
